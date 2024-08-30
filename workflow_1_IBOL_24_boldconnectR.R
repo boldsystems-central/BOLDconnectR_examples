@@ -9,7 +9,7 @@
 ############################################################################################################################# # Workflow 1
 #############################################################################################################################
 
-# The test data for the workflow consists of a total of 715 publicly avaiable records of 62 species from 2 species rich insect orders Diptera and Lepidoptera. The data has been compiled such that the records overall have a wide distribution
+# The workflow's test data consists of 715 publicly available records of 62 species from 2 species-rich insect orders Diptera and Lepidoptera (Dataset code: DS-IBOLR24). The data has been compiled so that the records have a wide distribution overall.
 
 # api key is required for retrieving data. It can be stored as a variable. Paste the API key here
 
@@ -52,7 +52,8 @@ bold.fields.data<-bold.fields.info()
 
 View(bold.fields.data)
 
-#1. Fetch the data for the records. The records are stored as a public dataset on BOLD database and is retrieved. The dataset code is entered in the 'param.data' argument. When providing single names for 'param.data' the param.index should be kept 1 by default. Care has to be taken to change the query.param to dataset_codes; Otherwise it will throw an error
+#1. Fetch the data for the records. 
+# The records are stored as a public dataset on BOLD database and is retrieved. The dataset code is entered in the 'param.data' argument. When providing single names for 'param.data' the param.index should be kept 1 by default. Care has to be taken to change the query.param to dataset_codes; Otherwise it will throw an error
 
 fetch.test.data<-bold.fetch(param.data = "DS-IBOLR24",
                                query.param = "dataset_codes",

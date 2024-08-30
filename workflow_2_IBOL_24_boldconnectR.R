@@ -97,7 +97,6 @@ fetch.cichlid.data.w.filt4<-bold.fetch(search.cichlid.data,
 head(subset(fetch.cichlid.data.w.filt4,select = c(processid,bin_uri,country.ocean)),10)
 
 
-
 #3. Align sequences 
 
 # A single genus 'Apistogramma' is used here
@@ -186,7 +185,7 @@ View(as.matrix(cichlid.beta.diversity$total.beta))
 cichlid.map<-bold.analyze.map(fetch.cichlid.data)
 
 #6b. Specific country
-cichlid.map.brazil=bold.analyze.map(fetch.cichlid.data,country = "Brazil")
+cichlid.map.brazil=bold.analyze.map(fetch.cichlid.data,country = c("Brazil","Peru"))
 
 
 #7. Export the fasta file of unaligned and multiple sequence alignment (export.file.path & export.file.name must be specified)
