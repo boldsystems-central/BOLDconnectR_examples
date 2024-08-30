@@ -39,8 +39,6 @@ if(!require('dplyr',quietly = TRUE))
 
 ## Installing and importing 'BOLDconnectR'
 
-# devtools::install_github("https://github.com/boldsystems-central/BOLDconnectR.git")
-
 devtools::install_github("https://github.com/boldsystems-central/BOLDconnectR/tree/v0.0.1-beta")
 
 library(BOLDconnectR)
