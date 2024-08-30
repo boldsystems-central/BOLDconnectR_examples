@@ -39,9 +39,6 @@ if(!require('dplyr',quietly = TRUE))
 
 ## Installing and importing 'BOLDconnectR'
 
-# devtools::install_github("https://github.com/sameerpadhye/BOLDconnectR.git",
-#                          auth_token = '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')
-
 # devtools::install_github("https://github.com/boldsystems-central/BOLDconnectR.git")
 
 devtools::install_github("https://github.com/boldsystems-central/BOLDconnectR/tree/v0.0.1-beta")
