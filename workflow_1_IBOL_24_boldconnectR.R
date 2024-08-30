@@ -11,9 +11,9 @@
 
 # The test data for the workflow consists of a total of 715 publicly avaiable records of 62 species from 2 species rich insect orders Diptera and Lepidoptera. The data has been compiled such that the records overall have a wide distribution
 
-# api key is required for retrieving data. It can be stored as a variable 
+# api key is required for retrieving data. It can be stored as a variable. Paste the API key here
 
-api.key = '58EEAA88-D681-49AB-A4AC-79779E1AF3D9'
+api.key = 
 
 # Installing BiocManager, msa and Biostrings is required for the sequence alignment function of BOLDconnectR
 

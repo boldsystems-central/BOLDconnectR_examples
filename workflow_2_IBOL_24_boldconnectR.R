@@ -3,9 +3,9 @@
 
 # The test data for the workflow consists of all public records available for three neotropical Cichlids (group of primarily freshwater fish found on all continents except Antarctica) genera: Apistogramma, Crenicichla (South America) and Cichlasoma (North, Central and South America).
 
-# api key is required for retrieving data. It can be stored as a variable 
+# api key is required for retrieving data. It can be stored as a variable (Paste the API key here)
 
-api.key = '58EEAA88-D681-49AB-A4AC-79779E1AF3D9'
+api.key = 
 
 # Installing BiocManager, msa and Biostrings is required for the sequence alignment function of BOLDconnectR
 
