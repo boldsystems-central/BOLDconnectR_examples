@@ -22,7 +22,9 @@ if (!require("BiocManager", quietly = TRUE))
 
 BiocManager::install('msa')
 
+
 BiocManager::install('Biostrings')
+
 
 library(msa)
 

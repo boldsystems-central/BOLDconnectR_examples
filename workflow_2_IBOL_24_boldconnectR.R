@@ -19,7 +19,9 @@ api.key =
 if (!require("BiocManager", quietly = TRUE))
   install.packages("BiocManager")
 
+
 BiocManager::install('msa')
+
 
 BiocManager::install('Biostrings')
 
