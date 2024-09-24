@@ -34,20 +34,32 @@ bcdm_df<-bold.fetch(get_by = "sampleid", identifiers = test.data$sampleid)
 #option 3 (using test.data processids)
 bcdm_df<-bold.fetch(get_by = "processid", identifiers = test.data$processid)
 
-#option 4 
+#option 4 (using bin_uris)
 
-bcdm_df<-bold.fetch(get_by = "bin", identifiers = braconids$bins)
+bcdm_df<-bold.fetch(get_by = "bin_uris", identifiers = c("BOLD:ADE1075",
+                                                         "BOLD:ADE2074",
+                                                         "BOLD:ADE1271",
+                                                         "BOLD:ACS1988",
+                                                         "BOLD:AAB9845",
+                                                         "BOLD:AAZ4742"))
 
 
 #operating mode b: pass-thru - default is TSV.  It would be nice if JSONL was supported but not critical or important. (will be saved in the working directory; working directory can be accessed by getwd())
 
-bcdm_subset_df<-bold.fetch(get_by = "dataset_codes", identifiers = "DS-IBOLR24", export="braconid_export", na.rm = TRUE)
+bcdm_subset_df<-bold.fetch(get_by = "dataset_codes", 
+                           identifiers = "DS-IBOLR24", 
+                           export="braconid_export", 
+                           na.rm = TRUE)
 
 #column filters: throw an error if non-valid columns
-fetch.test.data<-bold.fetch(get_by = "dataset_codes", identifiers = "DS-IBOLR24", export="braconid_export.", na.rm = TRUE, cols=c("bins"))
+fetch.test.data<-bold.fetch(get_by = "dataset_codes", 
+                            identifiers = "DS-IBOLR24", 
+                            export="braconid_export.", 
+                            na.rm = TRUE, 
+                            cols=c("bins"))
 
-#column presets: logic for this and above is: 1. generate a list of request fields; 2. confirm that all fields are BCDM; 3. apply filters while downloading. This has been used in the export function (presets)
-fetch.test.data<-bold.fetch(get_by = "dataset/project", identifiers = c("DS-IBOLR24"), col_presets="tax,geo", cols="processid,sampleid,collection_date")
+#column presets: logic for this and above is: 1. generate a list of request fields; 2. confirm that all fields are BCDM; 3. apply filters while downloading. This has been used in the bold.export function (presets given in the exports section below)
+# fetch.test.data<-bold.fetch(get_by = "dataset/project", identifiers = c("DS-IBOLR24"), col_presets="tax,geo", cols="processid,sampleid,collection_date")
 
 
 #logic should be as follows:
@@ -65,11 +77,25 @@ fetch.test.data<-bold.fetch(get_by = "dataset/project", identifiers = c("DS-IBOL
 
 ###############################################################################################################################################################################################
 
-###### Export
+###### Export (will be saved in the working directory; working directory can be accessed by getwd())
 
+# taxonomy preset
+bold.export(bold_df = bcdm_df,
+            export_type = "preset_df",
+            presets = 'taxonomy',
+            export_to = "bcdm.export")
 
+# geography preset
+bold.export(bold_df = bcdm_df,
+            export_type = "preset_df",
+            presets = 'geography',
+            export_to = "bcdm.export")
 
-
+# unaligned fasta file
+bold.export(bold_df = bcdm_df,
+            export_type = "fas",
+            cols_for_fas_names = c("processid","bin_uri"),
+            export_to = "bcdm.export_fas")
 
 
 ###############################################################################################################################################################################################
