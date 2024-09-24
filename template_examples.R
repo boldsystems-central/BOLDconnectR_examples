@@ -42,6 +42,9 @@ bcdm_df<-bold.fetch(get_by = "bin_uris", identifiers = c("BOLD:ADE1075",
                                                          "BOLD:ACS1988",
                                                          "BOLD:AAB9845",
                                                          "BOLD:AAZ4742"))
+# option 5 (project codes)
+
+bcdm_df<-bold.fetch(get_by = "project_codes",identifiers = 'RDOCE')
 
 
 #operating mode b: pass-thru - default is TSV.  It would be nice if JSONL was supported but not critical or important. (will be saved in the working directory; working directory can be accessed by getwd())
@@ -54,7 +57,7 @@ bcdm_subset_df<-bold.fetch(get_by = "dataset_codes",
 #column filters: throw an error if non-valid columns
 fetch.test.data<-bold.fetch(get_by = "dataset_codes", 
                             identifiers = "DS-IBOLR24", 
-                            export="braconid_export.", 
+                            export="braconid_export", 
                             na.rm = TRUE, 
                             cols=c("bins"))
 
