@@ -1,5 +1,5 @@
-############################################################################################################################# 
- 
+#############################################################################################################################
+
 # IBOL 2024: BOLDconnectR test workflows
 
 
@@ -49,17 +49,17 @@ bcdm_df<-bold.fetch(get_by = "project_codes",identifiers = 'RDOCE')
 
 #operating mode b: pass-thru - default is TSV.  It would be nice if JSONL was supported but not critical or important. (will be saved in the working directory; working directory can be accessed by getwd())
 
-bcdm_subset_df<-bold.fetch(get_by = "dataset_codes", 
-                           identifiers = "DS-IBOLR24", 
-                           export="braconid_export", 
+bcdm_subset_df<-bold.fetch(get_by = "dataset_codes",
+                           identifiers = "DS-IBOLR24",
+                           export="data_export",
                            na.rm = TRUE)
 
 #column filters: throw an error if non-valid columns
-fetch.test.data<-bold.fetch(get_by = "dataset_codes", 
-                            identifiers = "DS-IBOLR24", 
-                            export="braconid_export", 
-                            na.rm = TRUE, 
-                            cols=c("bins"))
+fetch.test.data<-bold.fetch(get_by = "dataset_codes",
+                            identifiers = "DS-IBOLR24",
+                            export="data_export",
+                            na.rm = TRUE,
+                            cols=c("genus","species","bin_uri"))
 
 #column presets: logic for this and above is: 1. generate a list of request fields; 2. confirm that all fields are BCDM; 3. apply filters while downloading. This has been used in the bold.export function (presets given in the exports section below)
 # fetch.test.data<-bold.fetch(get_by = "dataset/project", identifiers = c("DS-IBOLR24"), col_presets="tax,geo", cols="processid,sampleid,collection_date")
@@ -67,7 +67,7 @@ fetch.test.data<-bold.fetch(get_by = "dataset_codes",
 
 #logic should be as follows:
 
-#0. confirm parameters provided are valid 
+#0. confirm parameters provided are valid
 #1. get the list of fields. If none provide just use the full set
 #2. confirm list is valid. Do this regardless of if they provide a subset of columns
 #3. retrieve data in batches
@@ -105,8 +105,16 @@ bold.export(bold_df = bcdm_df,
 
 ###### Summarize
 
+bold.data.summarize(bold_df = bcdm_df,
+                    summarize_by = "presets",
+                    presets = 'geography',
+                    na.rm = F)
 
 
+bold.data.summarize(bold_df = bcdm_df,
+                    summarize_by = "presets",
+                    presets = 'taxonomy',
+                    na.rm = F)
 
 
 
