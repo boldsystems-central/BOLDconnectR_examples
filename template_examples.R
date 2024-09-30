@@ -59,7 +59,7 @@ fetch.test.data<-bold.fetch(get_by = "dataset_codes",
                             identifiers = "DS-IBOLR24",
                             export="data_export",
                             na.rm = TRUE,
-                            cols=c("genus","species","bin_uri"))
+                            cols=c("genus","species","bin_uris"))
 
 #column presets: logic for this and above is: 1. generate a list of request fields; 2. confirm that all fields are BCDM; 3. apply filters while downloading. This has been used in the bold.export function (presets given in the exports section below)
 # fetch.test.data<-bold.fetch(get_by = "dataset/project", identifiers = c("DS-IBOLR24"), col_presets="tax,geo", cols="processid,sampleid,collection_date")
@@ -105,11 +105,19 @@ bold.export(bold_df = bcdm_df,
 
 ###### Summarize
 
-bold.data.summarize(bold_df = bcdm_df,
+bold.data.summary<-bold.data.summarize(bold_df = bcdm_df,
                     summarize_by = "presets",
                     presets = 'geography',
                     na.rm = F)
 
+# View detailed summary
+bold.data.summary$summary
+
+# View concise summary
+bold.data.summary$concise_summ
+
+# Plot
+bold.data.summary$plot
 
 bold.data.summarize(bold_df = bcdm_df,
                     summarize_by = "presets",
