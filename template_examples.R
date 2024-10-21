@@ -103,7 +103,7 @@ bold.export(bold_df = bcdm_df,
 
 ###############################################################################################################################################################################################
 
-###### Summarize
+###### Summarize (Presets: `taxonomy`, `geography`,`sequences`,`attributions`, `ecology_biogeography` and `other_meta_data`)
 
 bold.data.summary<-bold.data.summarize(bold_df = bcdm_df,
                     summarize_by = "presets",
