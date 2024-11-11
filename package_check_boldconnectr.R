@@ -47,7 +47,7 @@ suggestions<-data.frame(Package=c("Biostrings", "BiocManager", "msa"))
 
 suggestions_available <- merge(installed_packages, suggestions, by = "Package")
 
-cat("\nDisplaying the suggested packages required by the bold.analyze.align and bold.analyze.tree functions of BOLDconnectR that are available with their respective versions for running the package smoothly. Please note:\n\n")
+cat("\nDisplaying the suggested packages with their respective versions that are available on your machine. These packages are required specifically by the bold.analyze.align (and bold.analyze.tree indrectly) function of the package. Please note that a) the rest of the functions do NOT require these packages and b) these packages will have to be installed and imported prior tp running the above mentioned function.\n\n")
 
 print(suggestions_available)
 
