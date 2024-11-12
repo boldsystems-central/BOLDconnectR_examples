@@ -5,8 +5,7 @@
 ##########################################################################################################################
 
 # Installing the package
-remove.packages('BOLDconnectR')
-.rs.restartR()
+
 devtools::install_github("https://github.com/boldsystems-central/BOLDconnectR")
 
 # Importing the package
@@ -20,20 +19,19 @@ if (!require("BiocManager", quietly = TRUE))
 
 BiocManager::install('msa')
 
-
 BiocManager::install('Biostrings')
 
-
-library(msa)
-
-library(Biostrings)
-
+# Optional
 
 if(!require('dplyr',quietly = TRUE))
 {
   install.packages('dplyr')
   
 }
+
+library(msa)
+
+library(Biostrings)
 
 library(dplyr)
 

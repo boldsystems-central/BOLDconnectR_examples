@@ -1,153 +1,154 @@
-############################################################################################################################# 
+################################################################################################################
 
 # IBOL 2024: BOLDconnectR test workflows
 
+###############################################################################################################
 
-#############################################################################################################################
+# Installing the package
 
-############################################################################################################################# # Workflow 2
-#############################################################################################################################
+devtools::install_github("https://github.com/boldsystems-central/BOLDconnectR")
 
-# The test data for the workflow consists of all public records available for three neotropical Cichlids (group of primarily freshwater fish found on all continents except Antarctica) genera: Apistogramma, Crenicichla (South America) and Cichlasoma (North, Central and South America).
+# Importing the package
 
-# api key is required for retrieving data. It can be stored as a variable (Paste the API key here)
-
-api.key = 
+library(BOLDconnectR)
 
 # Installing BiocManager, msa and Biostrings is required for the sequence alignment function of BOLDconnectR
 
 if (!require("BiocManager", quietly = TRUE))
   install.packages("BiocManager")
 
-
 BiocManager::install('msa')
-
 
 BiocManager::install('Biostrings')
 
-library(msa)
-
-library(Biostrings)
-
+# Optional
 
 if(!require('dplyr',quietly = TRUE))
 {
   install.packages('dplyr')
   
-  library(dplyr)
-  
 }
 
-## Installing and importing 'BOLDconnectR'
+library(msa)
 
-devtools::install_github("https://github.com/boldsystems-central/BOLDconnectR/tree/v0.0.1-beta")
+library(Biostrings)
 
-library(BOLDconnectR)
+library(dplyr)
 
-######################################## BOLDconnectR Functions ##########################################################
+############################################################################################################################# # Workflow 2
+#############################################################################################################################
 
-# Here the IDs are downloaded using 'bold.public.search' function and the data is then fetched using 'bold.fetch'
 
-#1. Search for records (public data)
+# Workflow uses the test data (test.data) that comes with the package
+?test.data
 
-search.cichlid.data<-bold.public.search(taxonomy= c("Apistogramma",
-                                                    "Crenicichla","Cichlasoma"))
+# api key is required for retrieving data. It is stored in the R session using the bold.apikey function
 
-#2. Fetch the data for the records
+bold.apikey()
 
-fetch.cichlid.data<-bold.fetch(search.cichlid.data,
-                               query.param = "processid",
-                               param.index = 1,
-                               api_key = api.key)
 
-# Fetch and filter data
+#1. Fetch the data for the records
 
-#2a. Altitude
-fetch.cichlid.data.w.filt1<-bold.fetch(search.cichlid.data,
-                                       query.param = "processid",
-                                       param.index = 1,
-                                       api_key = 'CE89B5A8-5ABE-4FB5-AEC6-187786EB1ED6',
-                                       filt.altitude = c(1,300))
+download_test_data<-bold.fetch(get_by = "processid",
+                               identifiers = test.data$processid)
+ 
+head(download_test_data)
 
-range(fetch.cichlid.data.w.filt1$elev)
+#1a. Fetch and filter data based on Altitude
+download_test_data.w.filt1<-bold.fetch(get_by = "processid",
+                                       identifiers = test.data$processid,
+                                       filt_altitude = c(500,1500))
 
-#2b. Institutes
-fetch.cichlid.data.w.filt2<-bold.fetch(search.cichlid.data,
-                                       query.param = "processid",
-                                       param.index = 1,
-                                       api_key = api.key,
-                                       filt.institutes = "South African Institute for Aquatic Biodiversity")
+range(download_test_data.w.filt1$elev,na.rm = T)
 
-head(subset(fetch.cichlid.data.w.filt2,select = c(processid,bin_uri,inst)),10)
+#1b. Fetch and filter data based on Institutes
+download_test_data.w.filt2<-bold.fetch(get_by = "processid",
+                                       identifiers = test.data$processid,
+                                       filt_institutes = "University of Toronto, Scarborough")
 
-#2c. Specific fields from the data
-fetch.cichlid.data.w.filt3<-bold.fetch(search.cichlid.data,
-                                       query.param = "processid",
-                                       param.index = 1,
-                                       api_key = api.key,
-                                       filt.fields = c("family","genus","region","identified_by"))
+head(subset(download_test_data.w.filt2,
+            select = c(processid,bin_uri,inst)),10)
 
-head(fetch.cichlid.data.w.filt3,10)
+#1c. Fetch and filter data based on identifier
+download_test_data.w.filt3<-bold.fetch(get_by = "processid",
+                                       identifiers = test.data$processid,
+                                       filt_identified.by = "BOLD ID Engine")
 
-#2d. Geography
-fetch.cichlid.data.w.filt4<-bold.fetch(search.cichlid.data,
-                                       query.param = "processid",
-                                       param.index = 1,
-                                       api_key = api.key,
-                                       filt.geography = c("Brazil", "Mexico"))
+head(download_test_data.w.filt3,10)
 
-head(subset(fetch.cichlid.data.w.filt4,select = c(processid,bin_uri,country.ocean)),10)
+#1d. Geography
+download_test_data.w.filt4<-bold.fetch(get_by = "processid",
+                                       identifiers = test.data$processid,
+                                       filt_geography = "Churchill")
+
+head(subset(download_test_data.w.filt4,
+            select = c(processid,bin_uri,region)),10)
+
+
+#2. Data summary of the fetched results
+
+# Presets
+#a Sequences preset
+bold.data.summarize(download_test_data,
+                    summarize_by = "presets",
+                    presets = 'sequences')
+
+#b Attributions preset
+bold.data.summarize(download_test_data,
+                    summarize_by = "presets",
+                    presets = 'attributions')
+
+# Specific columns
+bold.data.summarize(download_test_data,
+                    summarize_by = "fields",
+                    columns = c("bin_uri","inst","nuc"))
 
 
 #3. Align sequences 
 
 # A single genus 'Apistogramma' is used here
+unique(download_test_data$genus)
 
-fetch.cichlid.data.align<-bold.fetch(search.cichlid.data,
-                                     query.param = "processid",
-                                     param.index = 1,
-                                     api_key = api.key,
-                                     filt.taxonomy = 'Apistogramma')
+download_test_data%>%
+  group_by(genus)%>%
+  tally()
 
-
-align.cichlid.data<-BOLDconnectR:::bold.analyze.align(fetch.cichlid.data.align,
-                                                      marker = "COI-5P",
-                                                      seq.name.fields = c("species","bin_uri"),
-                                                      align.method = "ClustalOmega")
+test.data.align<-bold.fetch(get_by = "processid",
+                            identifiers = test.data$processid,
+                            filt_taxonomy = 'Attulus')
 
 
-head(subset(align.cichlid.data,select = c(aligned_seq,msa.seq.name)),10)
+test.align<-BOLDconnectR:::bold.analyze.align(test.data.align,
+                                              marker = "COI-5P",
+                                              cols_for_seq_names = c("species","bin_uri"),
+                                              align_method = "ClustalOmega")
+
+
+head(subset(test.align,select = c(aligned_seq,msa.seq.name)),10)
 
 # Check the number of rows of the dataset
 
-nrow(align.cichlid.data)
-
+nrow(test.align)
 
 #4. Analyze/Visualize the tree
 # Since tree generated for more than 50 sequences can get cluttered for base R graphics,(strictly) for visualization purposes, a random sample of 25observations is taken for visualization. Since the output of the bold.analyze.align is a BCDM data frame, it can be directly filtered.
 
-
-set.seed(123)
-
-cichlid.data.for.tree<-align.cichlid.data%>%
-  dplyr::sample_n(25)%>%
-  data.frame(.)
-
 #4a. Without generating the distance matrix output
-cichlid.tree<-bold.analyze.tree(cichlid.data.for.tree,
-                                dist.model = "K80",
-                                clus="nj",
-                                tree.plot = TRUE,
-                                tree.plot.type = 'p')
+test.tree<-bold.analyze.tree(test.align,
+                                dist_model = "K80",
+                                clus_method = "nj",
+                                tree_plot = TRUE,
+                                tree_plot_type = 'p')
 
 
 #4b. With the distance matrix output
-cichlid.tree.w.dist.mat<-bold.analyze.tree(cichlid.data.for.tree,
-                                           dist.model = "K80",
-                                           clus="nj",
-                                           dist.matrix = TRUE,
-                                           tree.plot = TRUE,
-                                           tree.plot.type = 'f')
+test.tree.w.dist.mat<-bold.analyze.tree(test.align,
+                                           dist_model = "K80",
+                                           clus_method = "nj",
+                                           tree_plot = TRUE,
+                                           tree_plot_type = 'r',
+                                           save_dist_mat = TRUE)
+
 
 View(as.matrix(cichlid.tree.w.dist.mat$dist_matrix))
 
@@ -156,38 +157,33 @@ View(as.matrix(cichlid.tree.w.dist.mat$dist_matrix))
 
 #5a. richness estimations based on country as a site category and bin_uri as the 'taxon.rank'
 
-cichlid.richness.diversity<-bold.analyze.diversity(fetch.cichlid.data,
-                                                   taxon.rank = "bin_uri",
-                                                   site.cat = "country.ocean",
-                                                   richness.res = TRUE,
-                                                   rich.plot.curve = TRUE,
-                                                   rich.curve.estimatr = "Chao1",
-                                                   rich.curve.x.axis = "Individuals")
+test.richness.diversity<-bold.analyze.diversity(download_test_data,
+                                                   taxon_rank = "species",
+                                                   site_type = "locations",
+                                                   location_type = "region",
+                                                   diversity_profile = "richness")
 
 
-View(cichlid.richness.diversity$richness)
-
-cichlid.richness.diversity$richness_plot
+View(test.richness.diversity$richness)
 
 
 #5b. Beta diversity based on country as a site category and bin_uri as the 'taxon.rank'
 
-cichlid.beta.diversity<-bold.analyze.diversity(fetch.cichlid.data,
-                                               taxon.rank = "bin_uri",
-                                               site.cat = "country.ocean",
-                                               beta.res = TRUE,
-                                               beta.index = "sorenson")
+test.shannon.diversity<-bold.analyze.diversity(download_test_data,
+                                               taxon_rank = "species",
+                                               site_type = "locations",
+                                               location_type = "region",
+                                               diversity_profile = "shannon")
 
-View(as.matrix(cichlid.beta.diversity$total.beta))
-
+test.shannon.diversity$shannon_div
 
 #6. Visualize the occurrences of the fetched records
 
 #6a. All occurrences
-cichlid.map<-bold.analyze.map(fetch.cichlid.data)
+test.map<-bold.analyze.map(download_test_data)
 
 #6b. Specific country
-cichlid.map.brazil=bold.analyze.map(fetch.cichlid.data,country = c("Brazil","Peru"))
+test.map.canada<-bold.analyze.map(download_test_data,country = "Canada")
 
 
 #7. Export the fasta file of unaligned and multiple sequence alignment (export.file.path & export.file.name must be specified)
