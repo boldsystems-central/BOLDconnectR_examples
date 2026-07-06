@@ -1,5 +1,5 @@
 ##########################################################################################################################
- 
+
 # BOLDconnectR test workflows
 
 ##########################################################################################################################
@@ -26,7 +26,7 @@ BiocManager::install('Biostrings')
 if(!require('dplyr',quietly = TRUE))
 {
   install.packages('dplyr')
-  
+
 }
 
 library(msa)
@@ -54,7 +54,7 @@ bold.fields.data<-bold.fields.info()
 
 View(bold.fields.data)
 
-#1. Fetch the data for the records. 
+#1. Fetch the data for the records.
 # The records are stored as a public dataset on BOLD database and is retrieved. The dataset code is entered in the 'param.data' argument. When providing single names for 'param.data' the param.index should be kept 1 by default. Care has to be taken to change the query.param to dataset_codes; Otherwise it will throw an error
 
 fetch.test.data<-bold.fetch(identifiers = "DS-IBOLR24",
@@ -120,17 +120,20 @@ fetch.test.data.export<-bold.fetch(identifiers = "DS-IBOLR24",
 # By presets
 # Geography preset
 bold.data.summarize(fetch.test.data,
-                    summarize_by = "presets",
-                    presets = 'geography')
+  summarize_by = "presets",
+  presets = "geography"
+)
 # Taxonomy preset
 bold.data.summarize(fetch.test.data,
-                    summarize_by = "presets",
-                    presets = 'taxonomy')
+  summarize_by = "presets",
+  presets = "taxonomy"
+)
 
 # All data
 
-all_data_summary<-bold.data.summarize(fetch.test.data,
-                                      summarize_by = "all_data")
+all_data_summary <- bold.data.summarize(fetch.test.data,
+  summarize_by = "all_data"
+)
 # Summary table
 all_data_summary$summary
 
@@ -138,10 +141,10 @@ all_data_summary$summary
 all_data_summary$plot
 
 
-#4. Align sequences 
+#4. Align sequences
 # Please note:
 #a. Biostrings and msa need to be imported beforehand
-#b.It might take considerable time depending on the system used). 
+#b.It might take considerable time depending on the system used).
 #c. The function by default uses all the default settings of 'msa'. Specific parameters like gap penalties can be passed through the '...' argument of the function(use ?msa::msa)
 
 # A single genus COI sequence data within the range of 600-650 basepairs is fetched here for convenience
@@ -172,7 +175,7 @@ test.tree<-bold.analyze.tree(bold_df=align.test.data,
 test.tree$data_for_plot
 
 # base frequencies
-test.tree$base_freq 
+test.tree$base_freq
 
 
 #5b. With the distance matrix output
